@@ -1,52 +1,22 @@
-import rpio from 'rpio';
+import rpio from "rpio";
+import { KY040 } from "./ky040.js";
 
 const DATAPIN = 6;
 const SWITCHPIN = 13;
 const CLOCKPIN = 5;
 
 rpio.init({
-	mapping: 'gpio'
+  mapping: "gpio",
+  mock: "raspi-3",
 });
 
-rpio.open(DATAPIN, rpio.INPUT, rpio.PULL_UP);
-rpio.open(SWITCHPIN, rpio.INPUT, rpio.PULL_UP);
-rpio.open(CLOCKPIN, rpio.INPUT, rpio.PULL_UP);
+const knob = new KY040({
+  dataPin: DATAPIN,
+  clockPin: CLOCKPIN,
+  switchPin: SWITCHPIN,
+});
 
-let EVENTBUFFER = [];
-
-const handleEvent = (event) => {
-	while (EVENTBUFFER.length > 2) {
-		EVENTBUFFER.shift();
-	}
-	EVENTBUFFER.push(event);
-
-	if (EVENTBUFFER[0] === "clock" && EVENTBUFFER[1] === "clock" && EVENTBUFFER[2] === "data") {
-		console.log("[KNOB] >>>");
-		EVENTBUFFER = [];
-	}
-	if (EVENTBUFFER[0] === "data" && EVENTBUFFER[1] === "clock" && EVENTBUFFER[2] === "data") {
-		console.log("[KNOB] <<<");
-		EVENTBUFFER = [];
-	}
-}
-
-rpio.poll(DATAPIN, handleEvent.bind(null, "data"), rpio.POLL_LOW);
-
-rpio.poll(CLOCKPIN, handleEvent.bind(null, "clock"), rpio.POLL_LOW);
-
-rpio.poll(SWITCHPIN, () => {
-	const switchPinValue = rpio.read(SWITCHPIN);
-	switch (switchPinValue) {
-		case 1: {
-			console.log("[BUTTON] UP");
-			break;
-		}
-		case 0: {
-			console.log("[BUTTON] DOWN");
-			break;
-		}
-	}
-}, rpio.POLL_BOTH);
-
-// clock clock data => right
-// data clock data => left
+knob.onButtonPress(console.log.bind(console, "[BUTTON] DOWN"));
+knob.onButtonRelease(console.log.bind(console, "[BUTTON] UP"));
+knob.onKnobTurnLeft(console.log.bind(console, "[KNOB] <<<"));
+knob.onKnobTurnRight(console.log.bind(console, "[KNOB] >>>"));
