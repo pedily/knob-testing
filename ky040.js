@@ -49,7 +49,6 @@ export class KY040 {
 
     // handle "knob turn right"
     if (buf[0] === "clock" && buf[1] === "clock" && buf[2] === "data") {
-      console.log("[KNOB] >>>");
       this._events.emit("turnright");
       this._knobEventBuffer = [];
       return;
