@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "follow-redirects": "^1.15.2",
+    "podcast-xml-parser": "^2.0.9",
     "rpio": "^2.4.2"
   }
 }
