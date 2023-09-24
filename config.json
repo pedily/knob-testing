@@ -1,6 +1,8 @@
 {
-    "feeds": [
-        "https://minkorrekt.podigee.io/feed/mp3",
-        "https://podcast-ohne-richtigen-namen.podigee.io/feed/mp3"
-    ]
+  "feeds": [
+    "https://minkorrekt.podigee.io/feed/mp3",
+    "https://podcast-ohne-richtigen-namen.podigee.io/feed/mp3",
+    "https://almostdaily.podigee.io/feed/mp3",
+    "https://plauschangriff.podigee.io/feed/mp3"
+  ]
 }
