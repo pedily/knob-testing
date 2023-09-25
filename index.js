@@ -1,5 +1,5 @@
 import { getFeedUrls } from "./config.js";
-import { initialize, loadfile } from "./player.js";
+import { addFile, initialize, play } from "./player.js";
 import { assureAppDataDir, assureDir } from "./utils/cache.js";
 import {
   assureEpisode,
@@ -8,6 +8,7 @@ import {
   getEpisodesDir,
 } from "./utils/episode.js";
 import { getFeed } from "./utils/feed.js";
+import { setup } from "./utils/gpio.js";
 
 (async () => {
   await assureAppDataDir();
@@ -42,29 +43,16 @@ import { getFeed } from "./utils/feed.js";
     }
   }
 
+  console.log("initializing player...");
   await initialize();
-  await loadfile(getEpisodeFileName(getEpisodeUrl(episodes[0])));
+
+  for (const episode of episodes) {
+    await addFile(getEpisodeFileName(getEpisodeUrl(episode)));
+  }
+
+  console.log("binding keys...");
+  setup();
+
+  console.log("playing episode...");
+  await play();
 })();
-
-// import rpio from "rpio";
-// import { KY040 } from "./ky040.js";
-
-// const DATAPIN = 6;
-// const SWITCHPIN = 13;
-// const CLOCKPIN = 5;
-
-// rpio.init({
-//   mapping: "gpio",
-//   mock: "raspi-3",
-// });
-
-// const knob = new KY040({
-//   dataPin: DATAPIN,
-//   clockPin: CLOCKPIN,
-//   switchPin: SWITCHPIN,
-// });
-
-// knob.onButtonPress(console.log.bind(console, "[BUTTON] DOWN"));
-// knob.onButtonRelease(console.log.bind(console, "[BUTTON] UP"));
-// knob.onKnobTurnLeft(console.log.bind(console, "[KNOB] <<<"));
-// knob.onKnobTurnRight(console.log.bind(console, "[KNOB] >>>"));

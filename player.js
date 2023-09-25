@@ -1,4 +1,4 @@
-import Mpv from "mpv";
+import MPV from "node-mpv-2";
 
 /**
  * what to use for "playing an audio file"?
@@ -10,14 +10,30 @@ import Mpv from "mpv";
  * media-player-controller controlling mpv sounds awesome!
  */
 
-let mpv;
+const mpv = new MPV({
+  audio_only: true,
+});
 
 export async function initialize() {
-  mpv = await Mpv({
-    args: ["--no-video", "--no-terminal"],
-  });
+  return await mpv.start();
 }
 
-export async function loadfile(fileName) {
-  return await mpv.command("loadfile", fileName);
+export async function addFile(fileName) {
+  return await mpv.load(fileName, "append");
+}
+
+export async function togglePause() {
+  return await mpv.togglePause();
+}
+
+export async function increaseVolume() {
+  return await mpv.adjustVolume(1);
+}
+
+export async function decreaseVolume() {
+  return await mpv.adjustVolume(-1);
+}
+
+export async function play() {
+  return await mpv.play();
 }
