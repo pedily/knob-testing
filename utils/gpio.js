@@ -9,7 +9,7 @@ export function setup() {
 
   rpio.init({
     mapping: "gpio",
-    mock: "raspi-3",
+    // mock: "raspi-3",
   });
 
   const knob = new KY040({
@@ -18,8 +18,17 @@ export function setup() {
     switchPin: SWITCHPIN,
   });
 
-  knob.onButtonPress(togglePause);
+  knob.onButtonPress(() => {
+    console.log("play/pause");
+    togglePause();
+  });
   // knob.onButtonRelease(console.log.bind(console, "[BUTTON] UP"));
-  knob.onKnobTurnLeft(decreaseVolume);
-  knob.onKnobTurnRight(increaseVolume);
+  knob.onKnobTurnLeft(() => {
+    console.log("vol down");
+    decreaseVolume();
+  });
+  knob.onKnobTurnRight(() => {
+    console.log("vol up");
+    increaseVolume();
+  });
 }

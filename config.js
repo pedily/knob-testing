@@ -1,12 +1,13 @@
 import { readFile } from "fs/promises";
 import { appData } from "./appdata.js";
+import _config from "./config.json" assert { type: "json" };
 
 let config;
 export const APP_NAME = "picast";
 
 export async function getConfig() {
   if (!config) {
-    const _config = JSON.parse(await readFile("config.json", "utf-8"));
+    //const _config = JSON.parse(await readFile("config.json", "utf-8"));
     config = _config;
   }
 
