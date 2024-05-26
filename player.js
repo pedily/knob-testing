@@ -27,11 +27,11 @@ export async function togglePause() {
 }
 
 export async function increaseVolume() {
-  return await mpv.adjustVolume(1);
+  return await mpv.adjustVolume(5);
 }
 
 export async function decreaseVolume() {
-  return await mpv.adjustVolume(-1);
+  return await mpv.adjustVolume(-5);
 }
 
 export async function play() {
